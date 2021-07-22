@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <title>Covid-age Tool</title>
+  </head>
+  <body>
+    <main class="container-fluid">
+      <div class="row">
+        <div class="col m-3 mb-0 d-sm-none d-block">
+          <div class="alert alert-info">
+            <p>
+              Ensure you understand the use of this tool before use, visit <a href="https://alama.org.uk/covid-19-medical-risk-assessment/" class="alert-link">https://alama.org.uk/covid-19-medical-risk-assessment/</a> for further details.
+            </p>
+          </div>
+        </div>
+        <div class="col col m-3 mb-0 d-none d-sm-block">
+          <div class="alert alert-info">
+            <p>
+              Details of the Covid-age project, evidence-base and warnings are published at
+              <a href="https://alama.org.uk/covid-19-medical-risk-assessment/" class="alert-link">https://alama.org.uk/covid-19-medical-risk-assessment/</a>
+            </p>
+            <p>Users are strongly advised to read the guidance on the ALAMA website before using the Covid-age tool.</p>
+            <p>The evidence reviewed allows calculation of indicative Covid-age for adults aged 20-75. Clinical judgement should be used to adjust the Covid-age value for workers outside this age range.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col bg-light m-4 mt-2 p-4 border border-primary rounded">
+          <div id="age_grp" class="mb-3">
+            <p class="form-label fw-bold lh-lg">Please input the person’s age in years (if under 20, enter 20 and if over 75 enter 75)</p>
+            <input class="form-control" type="number" name="age" id="age" value="20" min="20" max="75" />
+          </div>
+
+          <div id="sex_grp" class="mb-3">
+            <p class="form-label fw-bold lh-lg">Sex</p>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="sex" id="female" />
+              <label class="form-check-label" for="female">Female</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="sex" id="male" />
+              <label class="form-check-label" for="male">Male</label>
+            </div>
+          </div>
+
+          <div id="eth_grp" class="mb-3">
+            <p class="form-label fw-bold lh-lg">Ethnicity</p>
+            <select name="ethnic" id="ethnic" class="form-select">
+              <option value="none">White</option>
+              <option value="asian">Asian or Asian British</option>
+              <option value="black">Black</option>
+              <option value="mixed">Mixed</option>
+              <option value="other">Other non-white</option>
+            </select>
+          </div>
+
+          <div id="bmi_grp">
+            <p class="form-label fw-bold lh-lg">BMI</p>
+
+            <button id="bmi_disp" data-bs-toggle="modal" data-bs-target="#bmi_modal" class="btn btn-primary mb-3">Calculate BMI</button>
+
+            <div class="modal fade" id="bmi_modal" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Calculate BMI</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <button id="imp_toggle" class="btn btn-primary">Imperial</button>
+                    <button id="met_toggle" class="btn btn-primary">Metric</button>
+                    <br />
+                    <div id="imperial" class="d-none">
+                      <br />
+                      <p>Height:</p>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="hgt_feet">Feet: </span>
+                        <input type="number" class="form-control" name="imp_feet" id="imp_feet" min="0" />
+                        <span class="input-group-text" id="hgt_feet">Inches: </span>
+                        <input type="number" class="form-control" name="imp_inch" id="imp_inch" min="0" />
+                      </div>
+                      <p>Weight:</p>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="wgt_stn">Stone: </span>
+                        <input type="number" class="form-control" name="imp_stn" id="imp_stn" min="0" />
+                        <span class="input-group-text" id="wgt_lbs">Pounds: </span>
+                        <input type="number" class="form-control" name="imp_lbs" id="imp_lbs" min="0" />
+                      </div>
+                    </div>
+                    <div id="metric">
+                      <br />
+                      <p>Height:</p>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="hgt_m">Meters: </span>
+                        <input type="number" class="form-control" name="met_m" id="met_m" min="0" step=".01" />
+                      </div>
+                      <p>Weight:</p>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="wgt_kg">Kilograms </span>
+                        <input type="number" class="form-control" name="met_kg" id="met_kg" min="0" step=".1" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer"><span>Your BMI Category is:</span><span id="bmi_cat_disp"></span></div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="bmi_calc">Calculate BMI</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="form-label fw-bold lh-lg">BMI Group</p>
+            <select name="bmi_cat" id="bmi_cat" class="form-select mb-3">
+              <option value="none">Less than 30</option>
+              <option value="bmi1">30 to 34.9</option>
+              <option value="bmi2">35 to 35.9</option>
+              <option value="bmi3">Greater than or equal to 40</option>
+            </select>
+          </div>
+
+          <div class="ath_grp mb-3">
+            <p class="form-label fw-bold lh-lg">Asthma</p>
+            <select name="asthma" id="asthma" class="form-select">
+              <option value="none">None</option>
+              <option value="mild">Mild Asthma</option>
+              <option value="severe">Severe Asthma</option>
+            </select>
+          </div>
+
+          <div class="diabetes_grp mb-3">
+            <p class="form-label fw-bold lh-lg">Diabetes</p>
+            <select name="diabetes" id="diabetes" class="form-select">
+              <option value="none">None</option>
+              <option value="db0">Type 1 - HbA1c less than or equal to 58 mmol/mol in past year</option>
+              <option value="db1">Type 1 - HbA1c greater than 58 mmol/mol in past year</option>
+              <option value="db2">Type 1 - HbA1c unknown</option>
+              <option value="db3">Type 2 and other - HbA1c less than or equal to 58 mmol/mol in past year</option>
+              <option value="db4">Type 2 and other - HbA1c greater than 58 mmol/mol in past year</option>
+              <option value="db5">Type 2 and other - HbA1c unknown</option>
+            </select>
+          </div>
+
+          <div class="kid_grp mb-3">
+            <p class="form-label fw-bold lh-lg">Chronic Kidney Disease</p>
+            <select name="kidney" id="kidney" class="form-select">
+              <option value="none">None</option>
+              <option value="kd0">Estimated GFR 30-60 mL/min</option>
+              <option value="kd1">Estimated GFR less than 30 mL/min (includes patients on dialysis)</option>
+            </select>
+          </div>
+
+          <div class="nbc_grp mb-3">
+            <p class="form-label fw-bold lh-lg">Cancer other than leukaemia, lymphoma or myeloma</p>
+            <select name="nbc" id="nbc" class="form-select">
+              <option value="none">None</option>
+              <option value="nbc0">Diagnosed less than 1 year ago</option>
+              <option value="nbc1">Diagnosed 1 to 4.9 years ago</option>
+              <option value="nbc2">Diagnosed 5 years ago or longer</option>
+            </select>
+          </div>
+
+          <div class="blood_grp mb-3">
+            <p class="form-label fw-bold lh-lg">Leukaemia, lymphoma or myeloma</p>
+            <select name="blood" id="blood" class="form-select">
+              <option value="none">None</option>
+              <option value="bc0">Diagnosed less than 1 year ago</option>
+              <option value="bc1">Diagnosed 1 to 4.9 years ago</option>
+              <option value="bc2">Diagnosed 5 years ago or longer</option>
+            </select>
+          </div>
+
+          <div class="hrt_grp mb-3">
+            <p class="form-label fw-bold lh-lg">Heart</p>
+            <select name="heart" id="heart" class="form-select">
+              <option value="none">None</option>
+              <option value="h0">Heart failure</option>
+              <option value="h1">Other chronic heart disease</option>
+            </select>
+          </div>
+
+          <div class="oth_grp mb-3">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o0" id="o0" />
+              <label class="form-check-label" for="o0">Other chronic respiratory disease</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o1" id="o1" />
+              <label class="form-check-label" for="o1">Hypertension</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o2" id="o2" />
+              <label class="form-check-label" for="o2">Cerebrovascular disease</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o3" id="o3" />
+              <label class="form-check-label" for="o3">Liver disease</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o4" id="o4" />
+              <label class="form-check-label" for="o4">Chronic neurological disease other than stroke or dementia</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o5" id="o5" />
+              <label class="form-check-label" for="o5">Organ transplant recipient</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o6" id="o6" />
+              <label class="form-check-label" for="o6">Spleen diseases</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o7" id="o7" />
+              <label class="form-check-label" for="o7">Rheumatoid/lupus/psoriasis</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="o8" id="o8" />
+              <label class="form-check-label" for="o8">Other immunosuppressive condition</label>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row bg-primary m-4 p-4 border border-primary rounded fs-3 fw-bold text-white">
+            <div class="d-inline mb-3"><span>Covid-age: </span><span id="display">0</span></div>
+            <hr />
+            <p class="fs-6 fw-light">If infection occurs, the probability that it will be fatal is expected to lie between <span id="lifr">0</span> per 1000 and <span id="uifr">0</span> per 1000</p>
+            <p class="fst-italic fs-6 fw-light d-none" id="below_20">For Covid-ages less than 20, the risk of fatality may be even lower than indicated</p>
+          </div>
+          <div class="row bg-light m-4 p-4 border border-primary rounded d-none d-sm-block">
+            <table id="mod_table" class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Group</th>
+                  <th scope="col">Variable</th>
+                  <th scope="col">Modifier</th>
+                  <th scope="col">Information</th>
+                </tr>
+              </thead>
+              <tr class="tgl d-none" id="tr_female">
+                <td>Sex</td>
+                <td>Female</td>
+                <td id="tv_female">-5</td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_asian">
+                <td>Ethnicity</td>
+                <td>Asian or Asian British</td>
+                <td id="tv_asian">5</td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_black">
+                <td>Ethnicity</td>
+                <td>Black</td>
+                <td id="tv_black">7</td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_mixed">
+                <td>Ethnicity</td>
+                <td>Mixed</td>
+                <td id="tv_mixed">5</td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_other">
+                <td>Ethnicity</td>
+                <td>Other non-white</td>
+                <td id="tv_other">4</td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_bmi1">
+                <td>BMI</td>
+                <td>30 to 34.9</td>
+                <td id="tv_bmi1"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_bmi2">
+                <td>BMI</td>
+                <td>35 to 39.9</td>
+                <td id="tv_bmi2"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_bmi3">
+                <td>BMI</td>
+                <td>Greater than 40</td>
+                <td id="tv_bmi3"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_mild">
+                <td>Asthma</td>
+                <td>Mild</td>
+                <td id="tv_mild"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_severe">
+                <td>Asthma</td>
+                <td>Severe</td>
+                <td id="tv_severe"></td>
+                <td>Has required treatment with oral steroids in the past twelve months</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_db0">
+                <td>Diabetes</td>
+                <td>Type 1 HbA1c less than or equal to 58 mmol/mol in past year</td>
+                <td id="tv_db0"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_db1">
+                <td>Diabetes</td>
+                <td>Type 1 HbA1c greater than 58 mmol/mol in past year</td>
+                <td id="tv_db1"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_db2">
+                <td>Diabetes</td>
+                <td>Type 1 HbA1c unknown</td>
+                <td id="tv_db2"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_db3">
+                <td>Diabetes</td>
+                <td>Type 2 and other HbA1c less than or equal to 58 mmol/mol in past year</td>
+                <td id="tv_db3"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_db4">
+                <td>Diabetes</td>
+                <td>Type 2 and other HbA1c greater than 58 mmol/mol in past year</td>
+                <td id="tv_db4"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_db5">
+                <td>Diabetes</td>
+                <td>Type 2 and other HbA1c unknown</td>
+                <td id="tv_db5"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_kd0">
+                <td>Chronic kidney disease</td>
+                <td>Estimated GFR 30-60 mL/min</td>
+                <td id="tv_kd0"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_kd1">
+                <td>Chronic kidney disease</td>
+                <td>Estimated GFR less than 30 mL/min (includes patients on dialysis)</td>
+                <td id="tv_kd1"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_nbc0">
+                <td>Non-haematological cancer</td>
+                <td>Diagnosed less than 1 year ago</td>
+                <td id="tv_nbc0"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_nbc1">
+                <td>Non-haematological cancer</td>
+                <td>Diagnosed 1 to 4.9 years ago</td>
+                <td id="tv_nbc1"></td>
+                <td>Value represents average across category, including some people receiving immunosuppressive treatments</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_nbc2">
+                <td>Non-haematological cancer</td>
+                <td>Diagnosed 5 years ago or longer</td>
+                <td id="tv_nbc2"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_bc0">
+                <td>Haematological cancer</td>
+                <td>Diagnosed less than 1 year ago</td>
+                <td id="tv_bc0"></td>
+                <td>Value represents average across category, including some people receiving immunosuppressive treatments</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_bc1">
+                <td>Haematological cancer</td>
+                <td>Diagnosed 1 to 4.9 years ago</td>
+                <td id="tv_bc1"></td>
+                <td>Value represents average across category, including some people receiving immunosuppressive treatments</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_bc2">
+                <td>Haematological cancer</td>
+                <td>Diagnosed 5 years ago or longer</td>
+                <td id="tv_bc2"></td>
+                <td>Value represents average across category, including some people receiving immunosuppressive treatments</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_h0">
+                <td>Heart</td>
+                <td>Heart failure</td>
+                <td id="tv_h0"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_h1">
+                <td>Heart</td>
+                <td>Other chronic heart disease</td>
+                <td id="tv_h1"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o0">
+                <td>Other</td>
+                <td>Other chronic respiratory disease</td>
+                <td id="tv_o0"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o1">
+                <td>Other</td>
+                <td>Hypertension</td>
+                <td id="tv_o1"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o2">
+                <td>Other</td>
+                <td>Cerebrovascular disease</td>
+                <td id="tv_o2"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o3">
+                <td>Other</td>
+                <td>Liver disease</td>
+                <td id="tv_o3"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o4">
+                <td>Other</td>
+                <td>Chronic neurological disease other than stroke or dementia</td>
+                <td id="tv_o4"></td>
+                <td>Includes motor neurone disease, myasthenia gravis, multiple sclerosis, Parkinsons disease, cerebral palsy, quadriplegia, hemiplegia and progressive cerebellar disease</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o5">
+                <td>Other</td>
+                <td>Organ transplant</td>
+                <td id="tv_o5"></td>
+                <td></td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o6">
+                <td>Other</td>
+                <td>Spleen diseases</td>
+                <td id="tv_o6"></td>
+                <td>Includes splenectomy, or spleen dysfunction (e.g. from sickle cell disease). This is a broad group and clinical judgement may be needed to account for differences in vulnerability within the category</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o7">
+                <td>Other</td>
+                <td>Rheumatoid/lupus/psoriasis</td>
+                <td id="tv_o7"></td>
+                <td>Value represents average</td>
+              </tr>
+              <tr class="tgl d-none" id="tr_o8">
+                <td>Other</td>
+                <td>Other immunosuppressive condition</td>
+                <td id="tv_o8"></td>
+                <td>
+                  Includes HIV, conditions inducing permanent immunodeficiency (ever diagnosed), aplastic anaemia, and temporary immunodeficiency recorded within the past year. Does not include treatment with immunosuppressant medication.
+                  Do not use for diseases with immunosuppressive effects that are covered elsewhere in the calculator.
+                </td>
+              </tr>
+
+              <tfoot>
+                <tr>
+                  <td scope="col"></td>
+                  <th scope="col">Total</th>
+                  <th id="tbl_total" scope="col">0</th>
+                  <td scope="col"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="row bg-light m-4 p-4 border border-primary rounded">
+            <p>
+              Estimates of personal vulnerability from the Covid-age calculator are derived from published research in populations with no previous infection by, or vaccination against, SARS-CoV-2. As yet, no empirical data are available on
+              whether and how determinants of vulnerability differ in people who have previously been infected or vaccinated. The estimates may be revised if new research is reported that materially changes the balance of available
+              evidence.
+            </p>
+            <p>Risks associated with health conditions are estimated as averages and may vary within a disease category. Use clinical judgement to adjust the values where appropriate.</p>
+            <p>
+              Where a condition is not included because no adequate evidence is available, it may be reasonable to apply added year estimates taken from other similar conditions that are listed. For example inflammatory bowel diseases and
+              inflammatory skin diseases may have similar vulnerability to inflammatory joint diseases. Clinical judgement should be used.
+            </p>
+            <p>
+              Covid-age estimates vulnerability. Your risk will also depend on local infection rates (viral prevalence), your job role (and controls in place) and your behaviours in relation to social distancing, hygiene and face covering.
+            </p>
+            <p class="fs-5">A suggested stratification for vulnerability is:</p>
+            <ul class="fs-5 list-unstyled">
+              <li>85 and over = very high</li>
+              <li>70-84 = high</li>
+              <li>50-69 = moderate</li>
+              <li>Under 50 = low</li>
+            </ul>
+            <p>Clinical judgement can be used to place individuals in a higher or lower group where appropriate.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
